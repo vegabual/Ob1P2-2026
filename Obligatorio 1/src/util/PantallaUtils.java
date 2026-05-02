@@ -9,39 +9,27 @@ import java.util.Scanner;
  */
 public class PantallaUtils {
     //<editor-fold desc="Parametros">
-    private Scanner s;
+    private static PantallaUtils instancia = null;
+    private static Scanner s = null;
     private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_NEGRO = "\u001B[30m";
-    private static final String ANSI_ROJO = "\u001B[31m";
-    private static final String ANSI_VERDE = "\u001B[32m";
-    private static final String ANSI_AMARILLO = "\u001B[33m";
-    private static final String ANSI_AZUL = "\u001B[34m";
-    private static final String ANSI_PURPURA = "\u001B[35m";
-    private static final String ANSI_CELESTE = "\u001B[36m";
-    private static final String ANSI_BLANCO = "\u001B[37m";
-    
     //</editor-fold>
     
     //<editor-fold desc="Getters y setters">
-    private void setScanner(Scanner s) {
-        this.s = s;
-    }
-    
-    private Scanner getScanner(){
-        return this.s;
+    private static Scanner getScanner(){
+        if(s == null){
+            s = new Scanner(System.in);
+        }
+        
+        return s;
     }
     //</editor-fold>
-    
-    public PantallaUtils() {
-        setScanner(new Scanner(System.in));
-    }
     
     /**
      * Obtener entero entre 2 numeros. Si el input no es entero, seguira pidiendo.
      * @param pedido Texto para mostrar el pedido al usuario.
      * @return El entero ingresado por el usuario.
      */
-    public int getEnteroDeInput(String pedido){
+    public static int getEnteroDeInput(String pedido){
         String input = "";
         boolean esCorrecto = false;
         
@@ -66,7 +54,7 @@ public class PantallaUtils {
      * @param mayorQue Numero mas grande aceptado.
      * @return El entero ingresado por el usuario.
      */
-    public int getEnteroDeInputEntre(String pedido, int mayorQue, int menorQue){
+    public static int getEnteroDeInputEntre(String pedido, int mayorQue, int menorQue){
         boolean inputEsCorrecto = false;
         int numero = 0;
         
@@ -95,7 +83,7 @@ public class PantallaUtils {
      * @param str String a convertir.
      * @return Si se puede convertir.
      */
-    public boolean stringEsParseableAEntero(String str){
+    public static boolean stringEsParseableAEntero(String str){
         try{
             Integer.parseInt(str);
             return true;
@@ -110,8 +98,8 @@ public class PantallaUtils {
      * @param texto Texto a imprimir.
      * @param col Color en el que imprimira el texto.
      */
-    public void imprimirAColor(String texto, Color col){
-        System.out.print(getAnsi(col) + texto + ANSI_RESET);
+    public static void imprimirAColor(String texto, Color col){
+        System.out.print(col + texto + ANSI_RESET);
     }
     
     /**
@@ -119,27 +107,38 @@ public class PantallaUtils {
      * @param texto Texto a imprimir.
      * @param col Color en el que imprimira el texto.
      */
-    public void imprimirAColorln(String texto, Color col){
-        System.out.println(getAnsi(col) + texto + ANSI_RESET);
+    public static void imprimirAColorln(String texto, Color col){
+        System.out.println(col + texto + ANSI_RESET);
     }
     
     /**
-     * Obtiene el ansi del color a partir del nombre del color
-     * @param nombre Nombre del color requerido.
-     * @return Ansi del color.
+     * Imprime matriz con formato de tablero de juego
+     * @param mat Matriz a imprimir
+     * @param accent Color para los acentos (los bordes de la matriz)
      */
-    private String getAnsi(Color nombre){
-        String ansi = ANSI_RESET;
-        switch (nombre) {
-            case Negro -> ansi = ANSI_NEGRO;
-            case Rojo -> ansi = ANSI_ROJO;
-            case Verde -> ansi = ANSI_VERDE;
-            case Amarillo -> ansi = ANSI_AMARILLO;
-            case Azul -> ansi = ANSI_AZUL;
-            case Purpura -> ansi = ANSI_PURPURA;
-            case Celeste -> ansi = ANSI_CELESTE;
-            case Blanco -> ansi = ANSI_BLANCO;
+    public static void imprimirTablero(String[][] mat, Color accent){
+        for(int row = 0; row < mat.length;row++){
+            imprimirAColor("+", accent);
+            for(int col = 0; col<mat[row].length;col++){
+                imprimirAColor("---+", accent);
+            }
+            System.out.println("");
+            imprimirAColor("|", accent);
+            for(int col = 0; col<mat[row].length;col++){
+                if( mat[row][col].equals("V")){
+                    imprimirAColor("   |", accent);
+                } else{
+                    System.out.print(" " + mat[row][col] + " ");
+                    imprimirAColor("|", accent);
+                }
+            }
+            System.out.println("");
         }
-        return ansi;
+        imprimirAColor("+", accent);
+        for(int col = 0; col < mat[0].length;col++){
+            imprimirAColor("---+", accent);
+        }
+        System.out.println("");
+        
     }
 }

@@ -9,16 +9,14 @@ import util.PantallaUtils;
  */
 public class Menu {
     
-    private PantallaUtils pantallaUtil = new PantallaUtils();
-    
-    public void mostrarMenu(){
-        pantallaUtil.imprimirAColorln("*******************************************", Color.Verde);
-        pantallaUtil.imprimirAColorln("*************** Bienvenido! ***************", Color.Verde);
-        pantallaUtil.imprimirAColorln("*******************************************", Color.Verde);
+    public static void mostrarMenu(){
+        PantallaUtils.imprimirAColorln("*******************************************", Color.Verde);
+        PantallaUtils.imprimirAColorln("*************** Bienvenido! ***************", Color.Verde);
+        PantallaUtils.imprimirAColorln("*******************************************", Color.Verde);
         
         String request = "Que queres hacer? (Salir: 0, Registrar tester: 1, Registrar matriz de juego: 2, Registrar testeo: 3, Consulta de testers: 4, Estadisticas: 5): ";
         
-        int option = pantallaUtil.getEnteroDeInputEntre(request,0,5);
+        int option = PantallaUtils.getEnteroDeInputEntre(request,0,5);
         
         while (!(option == 0)){
             switch (option) {
@@ -29,8 +27,8 @@ public class Menu {
                 case 5 -> System.out.println("Estadisticas");
             }
             
-            option =  pantallaUtil.getEnteroDeInputEntre(request,0,5);
+            option =  PantallaUtils.getEnteroDeInputEntre(request,0,5);
         }
-        pantallaUtil.imprimirAColorln("Gracias por participar del testing!", Color.Purpura);
+        PantallaUtils.imprimirAColorln("Gracias por participar del testing!", Color.Purpura);
     }
 }
