@@ -14,7 +14,6 @@ public enum Color {
     Blanco("\u001B[37m"),
     PurpuraNegrita("\033[1;35m");
     
-    
     private final String code;
 
     Color(String code) {

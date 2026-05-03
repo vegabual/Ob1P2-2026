@@ -1,6 +1,8 @@
 package util;
 
 import enums.Color;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -21,6 +23,17 @@ public class PantallaUtils {
         }
         
         return s;
+    }
+    //</editor-fold>
+    
+    //<editor-fold desc="Constructor - Settea utf-8">
+    static{
+        try{
+            System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
+        }
+        catch(Exception e){
+            System.out.println("Hubo un error! " + e.getMessage());
+        }
     }
     //</editor-fold>
     
@@ -83,7 +96,7 @@ public class PantallaUtils {
      * @param str String a convertir.
      * @return Si se puede convertir.
      */
-    public static boolean stringEsParseableAEntero(String str){
+    private static boolean stringEsParseableAEntero(String str){
         try{
             Integer.parseInt(str);
             return true;
@@ -116,7 +129,7 @@ public class PantallaUtils {
      * @param mat Matriz a imprimir
      * @param accent Color para los acentos (los bordes de la matriz)
      */
-    public static void imprimirTablero(String[][] mat, Color accent){
+    public static void imprimirTablero(char[][] mat, Color accent){
         for(int row = 0; row < mat.length;row++){
             imprimirAColor("+", accent);
             for(int col = 0; col<mat[row].length;col++){
@@ -125,7 +138,7 @@ public class PantallaUtils {
             System.out.println("");
             imprimirAColor("|", accent);
             for(int col = 0; col<mat[row].length;col++){
-                if( mat[row][col].equals("V")){
+                if( mat[row][col] == 'V'){
                     imprimirAColor("   |", accent);
                 } else{
                     System.out.print(" " + mat[row][col] + " ");
@@ -139,6 +152,39 @@ public class PantallaUtils {
             imprimirAColor("---+", accent);
         }
         System.out.println("");
-        
+    }
+    
+    public static char[][] leerMatrizDeConsola(int filas, int columnas){
+        char[][] mat = new char[filas][columnas];
+        String lector;
+        for(int f = 0; f < filas; f++){ //Repito por cantidad de filas requeridas
+            imprimirAColor("Ingrese fila numero:  " + f, Color.Amarillo);
+            lector = leerTrimmeado();
+            boolean filaValida = false;
+            while (!filaValida){ //Pedir valores mientras no sea valida la columna
+                while(lector.length() != columnas){ //Mientras no se ingresen tantos caracteres como columnas, volver a pedir fila
+                    imprimirAColorln("La matriz debe tener  " + columnas + " columnas", Color.Rojo);
+                    imprimirAColor("Ingrese fila numero:  " + f, Color.Amarillo);
+                    lector = leerTrimmeado();
+                }
+                filaValida = true; //Asumo que la fila esta correcta hasta que se demuestre lo contrario
+                for(int c = 0; c < columnas && filaValida; c++){ //Recorro el string que se ingreso
+                    char caracter = lector.charAt(c);
+                    if(caracter == 'V' || caracter == 'B' || caracter == 'N'){ //Si el valor ingresado esta dentro de lo correcto, lo ingreso a la matriz
+                        mat[f][c] = caracter;
+                    } else{ //Sino, pongo filaValida en false, y vuelvo a pedir la fila completa
+                        filaValida = false;
+                        imprimirAColorln("La matriz solo acepta 'B', 'N' o 'V' columnas", Color.Rojo);
+                        imprimirAColor("Ingrese fila numero:  " + f, Color.Amarillo);
+                        lector = leerTrimmeado();
+                    }
+                }
+            }
+        }
+        return mat;
+    }
+    
+    private static String leerTrimmeado(){
+        return getScanner().nextLine().trim();
     }
 }
