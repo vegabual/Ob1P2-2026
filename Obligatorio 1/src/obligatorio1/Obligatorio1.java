@@ -22,15 +22,15 @@ public class Obligatorio1 {
     public static void main(String[] args) {
         try{
             System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
-            String[][] tablero = {
-                {"V","V","N","N","V","V","N","N","V","V"},
-                {"N","N","N","N","N","N","N","N","N","N"},
-                {"N","V","V","V","V","V","N","N","V","N"},
-                {"N","V","V","V","V","V","N","N","V","N"},
-                {"N","V","V","V","V","V","N","N","V","N"},
-                {"N","B","B","B","B","B","N","N","B","N"},
-                {"B","V","V","V","V","V","B","B","V","B"},
-                {"B","B","B","B","B","B","B","B","B","B"}
+            char[][] tablero = {
+                {'V','V','N','N','V','V','N','N','V','V'},
+                {'N','N','N','N','N','N','N','N','N','N'},
+                {'N','V','V','V','V','V','N','N','V','N'},
+                {'N','V','V','V','V','V','N','N','V','N'},
+                {'N','V','V','V','V','V','N','N','V','N'},
+                {'N','B','B','B','B','B','N','N','B','N'},
+                {'B','V','V','V','V','V','B','B','V','B'},
+                {'B','B','B','B','B','B','B','B','B','B'}
             };
 
             PantallaUtils.imprimirTablero(tablero,Color.PurpuraNegrita);
