@@ -1,6 +1,5 @@
 package service;
 
-import enums.Color;
 import model.Tester;
 import util.PantallaUtils;
 
@@ -41,30 +40,30 @@ public class Menu {
             imprimirTitulo();
             option =  PantallaUtils.getEnteroDeInputEntre(pedido,0,5, true, mensajeDeError);
         }
-        PantallaUtils.imprimirAColor("Gracias por participar del testing!", Color.Purpura, true);
+        PantallaUtils.imprimirTexto("Gracias por participar del testing!", true);
     }
     
     private static void imprimirTitulo(){
-            PantallaUtils.imprimirAColor("--------------------------------------------", Color.Verde, true);
-            PantallaUtils.imprimirAColor("|                   MENU                   |", Color.Verde, true);
-            PantallaUtils.imprimirAColor("--------------------------------------------", Color.Verde, true);
+            PantallaUtils.imprimirTexto("--------------------------------------------", true);
+            PantallaUtils.imprimirTexto("|                   MENU                   |", true);
+            PantallaUtils.imprimirTexto("--------------------------------------------", true);
     }
     
     private static void registrarTesterPorConsola(){
-        PantallaUtils.imprimirAColor("--------------------------------------------", Color.PurpuraNegrita, true);
+        PantallaUtils.imprimirTexto("--------------------------------------------", true);
         String nombre = PantallaUtils.getStringTrimmeadoDeInput("Ingrese el nombre del tester: ", false);
         int edad = PantallaUtils.getEnteroDeInputEntre("Ingrese la edad del tester: ", 0, 100, false, "La edad debe estar entre 0 y 100");
         int experiencia = PantallaUtils.getEnteroDeInputEntre("Ingrese la edad del tester: ", 0, edad, false, "La experiencia debe estar entre 0 y " + edad);
         
         if(getSistema().registrarTester(nombre, edad, experiencia)){
-            PantallaUtils.imprimirAColor("El tester fue agregado correctamente", Color.Verde, true);
+            PantallaUtils.imprimirTexto("El tester fue agregado correctamente", true);
         } else{
-            PantallaUtils.imprimirAColor("ERROR: Ya existe un tester con el nombre " + nombre, Color.Rojo, true);
+            PantallaUtils.imprimirTexto("ERROR: Ya existe un tester con el nombre " + nombre, true);
         }
     }
     
     private static void registrarMatrizPorConsola(){
-        PantallaUtils.imprimirAColor("--------------------------------------------", Color.PurpuraNegrita, true);
+        PantallaUtils.imprimirTexto("--------------------------------------------", true);
         boolean tableroDefault = PantallaUtils.getBooleanDeInput("Desea usar el tablero por defecto? ", false);
         if(tableroDefault){
             getSistema().registrarTablero();
@@ -75,8 +74,8 @@ public class Menu {
     }
     
     private static void registrarTesteo(){
-        PantallaUtils.imprimirAColor("--------------------------------------------", Color.PurpuraNegrita, true);
-        int caso = PantallaUtils.getEnteroDeInputEntre("Ingrese el caso a probar: ", 1,5,false,"El caso ingresado no existe, solo se aceptan numeros del 1 al 5");
+        PantallaUtils.imprimirTexto("--------------------------------------------", true);
+        int caso = PantallaUtils.getEnteroDeInputEntre("Ingrese el caso a probar: ", 1, 5, false, "El caso ingresado no existe, solo se aceptan numeros del 1 al 5");
         Tester tester = seleccionarTester();
         String comentario = PantallaUtils.getStringTrimmeadoDeInput("Comentario: ", false);
         getSistema().registrarTesteo(caso, tester, comentario);
