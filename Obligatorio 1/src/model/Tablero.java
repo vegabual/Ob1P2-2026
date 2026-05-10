@@ -1,16 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author windows
- */
+import enums.Color;
+import enums.Sentido;
+import static util.PantallaUtils.stringAColor;
+
 public class Tablero {
     private char[][] matriz;
-
+    
+    //<editor-fold desc="Getters y Setters">
     public char[][] getMatriz() {
         return matriz;
     }
@@ -18,7 +15,9 @@ public class Tablero {
     public void setMatriz(char[][] matriz) {
         this.matriz = matriz;
     }
+    //</editor-fold>
     
+    //<editor-fold desc="Constructores">
     public Tablero(){
         setDefault();
     }
@@ -26,18 +25,69 @@ public class Tablero {
     public Tablero(char[][] matriz){
         setMatriz(matriz);
     }
+    //</editor-fold>
     
     public void setDefault(){
         char[][] defaultMat  = {
                 {'V','V','N','N','V','V','N','N','V','V'},
                 {'N','N','N','N','N','N','N','N','N','N'},
-                {'N','V','V','V','V','V','N','N','V','N'},
-                {'N','V','V','V','V','V','N','N','V','N'},
-                {'N','V','V','V','V','V','N','N','V','N'},
-                {'N','B','B','B','B','B','N','N','B','N'},
-                {'B','V','V','V','V','V','B','B','V','B'},
-                {'B','B','B','B','B','B','B','B','B','B'}
+                {'N','N','V','V','N','N','V','V','N','N'},
+                {'V','V','V','V','V','V','V','V','V','V'},
+                {'V','V','V','V','V','V','V','V','V','V'},
+                {'B','B','V','V','B','B','V','V','B','B'},
+                {'B','B','B','B','B','B','B','B','B','B'},
+                {'V','V','B','B','V','V','B','B','V','V'}
         };
         this.setMatriz(defaultMat);
+    }
+    
+    public int contarFichas(char color){
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public boolean validarMovimientoIndividual(char color, char forma, Sentido sentido, int fila, int columna, int tamanio, int pasos){
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    public boolean validarMovimientoEnGrupo(char color, Sentido sentido, int fila, int columna, int pasos){
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    /**
+     * Se retorna el string con el formato correspondiente al tablero
+     * @return el string con el formato del tablero, de forma que al imprimir en pantalla se ve acorde a lo requerido en la letra
+     */
+    public String prepararTablero(){
+        Color acento = Color.PurpuraNegrita;
+        String toStr = "";
+        
+        for(int fila = 0; fila < this.getMatriz().length;fila++){//Recorro las filas
+            toStr += stringAColor("+", acento); //Ingreso el + de la esquina superior izquierda
+            for(int col = 0; col<this.getMatriz()[fila].length;col++){ //por cada columna ingreso el borde superior de la celda
+                toStr += stringAColor("---+", acento); //Borde superior
+            }
+            toStr += "\n" + stringAColor("|", acento);//Ingreso el salto de linea y el borde izquierdo de la matriz
+            for(int col = 0; col<this.getMatriz()[fila].length;col++){ //Recorro las columnas
+                if( this.getMatriz()[fila][col] == 'V'){ //Si es V, dejo el espacio vacio
+                    toStr += stringAColor("   |", acento);
+                } else{ //Sino, ingreso la ficha, y el borde derecho del bloque
+                    toStr += " " + this.getMatriz()[fila][col] + " ";
+                    toStr += stringAColor("|", acento);
+                }
+            }
+            toStr += "\n"; //Ingreso el salto de linea al terminar de recorrer las columas y pasar a la siguiente fila
+        }
+        //Una vez termino de ingresar las fichas, ingreso el borde inferior
+        toStr += stringAColor("+", acento); //Ingreso el + de la esquina inferior izquierda
+        for(int col = 0; col < this.getMatriz()[0].length;col++){ //Por cada columna, ingreso el borde inferior de la celda
+            toStr += stringAColor("---+", acento); //Borde inferior
+        }
+        toStr += "\n"; //Salto de linea al terminar de ingresar el tablero
+        
+        return toStr;
+    }
+    
+    public boolean verificarConexion(char ficha){
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
