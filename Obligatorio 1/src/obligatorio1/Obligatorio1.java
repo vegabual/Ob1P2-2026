@@ -1,9 +1,5 @@
 package obligatorio1;
 
-import enums.Color;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import model.Tablero;
 import service.Menu;
 import util.PantallaUtils;
 
@@ -15,12 +11,12 @@ public class Obligatorio1 {
     public static void main(String[] args) {
         try{
             
-            PantallaUtils.imprimirAColor("********************************************", Color.PurpuraNegrita, true);
-            PantallaUtils.imprimirAColor("*        Bienvenido al Obligatorio1        *", Color.PurpuraNegrita, true);
-            PantallaUtils.imprimirAColor("*         Trabajo desarrollado por         *", Color.PurpuraNegrita, true);
-            PantallaUtils.imprimirAColor("*          Lourdes Ayala - 354398          *", Color.PurpuraNegrita, true);
-            PantallaUtils.imprimirAColor("*        Veronica Busiello - 212712        *", Color.PurpuraNegrita, true);
-            PantallaUtils.imprimirAColor("********************************************", Color.PurpuraNegrita, true);
+            PantallaUtils.imprimirTexto("********************************************", true);
+            PantallaUtils.imprimirTexto("*        Bienvenido al Obligatorio1        *", true);
+            PantallaUtils.imprimirTexto("*         Trabajo desarrollado por         *", true);
+            PantallaUtils.imprimirTexto("*          Lourdes Ayala - 354398          *", true);
+            PantallaUtils.imprimirTexto("*        Veronica Busiello - 212712        *", true);
+            PantallaUtils.imprimirTexto("********************************************", true);
             
 //            System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
 //            char[][] tablero = {
@@ -46,7 +42,7 @@ public class Obligatorio1 {
             Menu.mostrarMenu();
         }
         catch(Exception e){
-            PantallaUtils.imprimirAColor("Hubo un error! " + e.getMessage(), Color.Rojo, true);
+            PantallaUtils.imprimirTexto("Hubo un error! " + e.getMessage(), true);
         }
     }
     

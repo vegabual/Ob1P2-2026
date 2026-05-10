@@ -1,6 +1,5 @@
 package util;
 
-import enums.Color;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
@@ -50,14 +49,12 @@ public class PantallaUtils {
         boolean esCorrecto = false;
         
         do{
-            String warning = stringAColor("(Solo estan permitidos numeros enteros) ",
-                    Color.Amarillo);
+            String warning = "(Solo estan permitidos numeros enteros) ";
             
             input = getStringTrimmeadoDeInput(warning + pedido, conSaltoDeLinea);
             esCorrecto = stringEsParseableAEntero(input); //Chequea si el texto ingresado es un entero
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirAColor("El valor ingresado no es un numero entero", 
-                        Color.Rojo, true);
+                imprimirTexto("El valor ingresado no es un numero entero", true);
             }
         } while (!esCorrecto);
         
@@ -96,7 +93,7 @@ public class PantallaUtils {
             numero = getEnteroDeInput(pedido, conSaltoDeLinea);    
             inputEsCorrecto = numero <= menorQue && numero >= mayorQue;
             if(!inputEsCorrecto){
-                imprimirAColor("ERROR: " + mensajeDeError, Color.Rojo, true);
+                imprimirTexto("ERROR: " + mensajeDeError, true);
             }
         } while (!inputEsCorrecto);
         
@@ -148,14 +145,14 @@ public class PantallaUtils {
         boolean siONo = false;
         
         do{
-            String warning = stringAColor("(S/N): ", Color.Amarillo);
+            String warning = "(S/N): ";
             
             input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea);
             esCorrecto = input.equalsIgnoreCase("S") || input.equalsIgnoreCase("Si") 
                     || input.equalsIgnoreCase("N") || input.equalsIgnoreCase("No"); //Chequea si el texto ingresado es S o N
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirAColor("El valor ingresado no es correcto. Ingrese "
-                        + "unicamente S o N.", Color.Rojo, true);
+                imprimirTexto("El valor ingresado no es correcto. Ingrese "
+                        + "unicamente S o N.", true);
             }
         } while (!esCorrecto);
         
@@ -163,13 +160,12 @@ public class PantallaUtils {
     }
     
     /**
-     * Imprime texto a color en consola.
+     * Imprime texto en consola.
      * @param texto Texto a imprimir.
-     * @param col Color en el que imprimira el texto.
      * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea luego de la impresion
      */
-    public static void imprimirAColor(String texto, Color col, boolean conSaltoDeLinea){
-        System.out.print(col + texto + ANSI_RESET);
+    public static void imprimirTexto(String texto, boolean conSaltoDeLinea){
+        System.out.print(texto);
         if(conSaltoDeLinea){
             System.out.println();
         }
@@ -183,40 +179,30 @@ public class PantallaUtils {
     }
     
     /**
-     * Devuelve texto con formato de color para consola.
-     * @param texto Texto a pasar al formato.
-     * @param col Color en el que imprimira el texto.
-     */
-    public static String stringAColor(String texto, Color col){
-        return col + texto + ANSI_RESET;
-    }
-    
-    /**
      * Imprime matriz con formato de tablero de juego
      * @param mat Matriz a imprimir
-     * @param accent Color para los acentos (los bordes de la matriz)
      */
-    public static void imprimirTablero(char[][] mat, Color accent){
+    public static void imprimirTablero(char[][] mat){
         for(int row = 0; row < mat.length;row++){
-            imprimirAColor("+", accent, false);
+            imprimirTexto("+", false);
             for(int col = 0; col<mat[row].length;col++){
-                imprimirAColor("---+", accent,false);
+                imprimirTexto("---+", false);
             }
             imprimirSaltoDeLinea();
-            imprimirAColor("|", accent,false);
+            imprimirTexto("|", false);
             for(int col = 0; col<mat[row].length;col++){
                 if( mat[row][col] == 'V'){
-                    imprimirAColor("   |", accent,false);
+                    imprimirTexto("   |", false);
                 } else{
                     System.out.print(" " + mat[row][col] + " ");
-                    imprimirAColor("|", accent,false);
+                    imprimirTexto("|", false);
                 }
             }
             imprimirSaltoDeLinea();
         }
-        imprimirAColor("+", accent,false);
+        imprimirTexto("+", false);
         for(int col = 0; col < mat[0].length;col++){
-            imprimirAColor("---+", accent,false);
+            imprimirTexto("---+", false);
         }
         imprimirSaltoDeLinea();
     }
@@ -231,12 +217,12 @@ public class PantallaUtils {
         char[][] mat = new char[filas][columnas];
         String lector;
         for(int f = 0; f < filas; f++){ //Repito por cantidad de filas requeridas
-            String pedido = stringAColor("Ingrese fila numero:  " + f, Color.Amarillo);
+            String pedido = "Ingrese fila numero:  " + f;
             lector = getStringTrimmeadoDeInput(pedido, false);
             boolean filaValida = false;
             while (!filaValida){ //Pedir valores mientras no sea valida la columna
                 while(lector.length() != columnas){ //Mientras no se ingresen tantos caracteres como columnas, volver a pedir fila
-                    imprimirAColor("La matriz debe tener  " + columnas + " columnas", Color.Rojo, true);
+                    imprimirTexto("La matriz debe tener  " + columnas + " columnas",  true);
                     lector = getStringTrimmeadoDeInput(pedido, false);
                 }
                 filaValida = true; //Asumo que la fila esta correcta hasta que se demuestre lo contrario
@@ -246,7 +232,7 @@ public class PantallaUtils {
                         mat[f][c] = caracter;
                     } else{ //Sino, pongo filaValida en false, y vuelvo a pedir la fila completa
                         filaValida = false;
-                        imprimirAColor("La matriz solo acepta 'B', 'N' o 'V' columnas", Color.Rojo, true);
+                        imprimirTexto("La matriz solo acepta 'B', 'N' o 'V' columnas", true);
                         lector = getStringTrimmeadoDeInput(pedido, false);
                     }
                 }

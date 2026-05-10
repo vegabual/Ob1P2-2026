@@ -1,8 +1,6 @@
 package model;
 
-import enums.Color;
 import enums.Sentido;
-import static util.PantallaUtils.stringAColor;
 
 public class Tablero {
     private char[][] matriz;
@@ -58,29 +56,28 @@ public class Tablero {
      * @return el string con el formato del tablero, de forma que al imprimir en pantalla se ve acorde a lo requerido en la letra
      */
     public String prepararTablero(){
-        Color acento = Color.PurpuraNegrita;
         String toStr = "";
         
         for(int fila = 0; fila < this.getMatriz().length;fila++){//Recorro las filas
-            toStr += stringAColor("+", acento); //Ingreso el + de la esquina superior izquierda
+            toStr += "+"; //Ingreso el + de la esquina superior izquierda
             for(int col = 0; col<this.getMatriz()[fila].length;col++){ //por cada columna ingreso el borde superior de la celda
-                toStr += stringAColor("---+", acento); //Borde superior
+                toStr += "---+"; //Borde superior
             }
-            toStr += "\n" + stringAColor("|", acento);//Ingreso el salto de linea y el borde izquierdo de la matriz
+            toStr += "\n|";//Ingreso el salto de linea y el borde izquierdo de la matriz
             for(int col = 0; col<this.getMatriz()[fila].length;col++){ //Recorro las columnas
                 if( this.getMatriz()[fila][col] == 'V'){ //Si es V, dejo el espacio vacio
-                    toStr += stringAColor("   |", acento);
+                    toStr += "   |";
                 } else{ //Sino, ingreso la ficha, y el borde derecho del bloque
                     toStr += " " + this.getMatriz()[fila][col] + " ";
-                    toStr += stringAColor("|", acento);
+                    toStr += "|";
                 }
             }
             toStr += "\n"; //Ingreso el salto de linea al terminar de recorrer las columas y pasar a la siguiente fila
         }
         //Una vez termino de ingresar las fichas, ingreso el borde inferior
-        toStr += stringAColor("+", acento); //Ingreso el + de la esquina inferior izquierda
+        toStr += "+"; //Ingreso el + de la esquina inferior izquierda
         for(int col = 0; col < this.getMatriz()[0].length;col++){ //Por cada columna, ingreso el borde inferior de la celda
-            toStr += stringAColor("---+", acento); //Borde inferior
+            toStr += "---+"; //Borde inferior
         }
         toStr += "\n"; //Salto de linea al terminar de ingresar el tablero
         
