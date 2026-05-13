@@ -5,7 +5,8 @@ import model.Tester;
 import util.PantallaUtils;
 
 public class Menu {
-    private static final String SEPARADOR = "--------------------------------------------"; //Separador utilizado a lo largo del menu para generar recuadros y separaciones
+    private static final String BORDE_ENCUADRE = "--------------------------------------------"; //Separador utilizado a lo largo del menu para generar recuadros y separaciones
+    private static final String SEPARADOR = "********************************************"; //Separador utilizado a lo largo del menu para generar recuadros y separaciones
     private static Sistema sistema = new Sistema();
 
     //<editor-fold desc="Getters y Setters">
@@ -40,8 +41,8 @@ public class Menu {
                 case 1 -> registrarTesterPorConsola();
                 case 2 -> registrarMatrizPorConsola();
                 case 3 -> registrarTesteo();
-                case 4 -> System.out.println("Consulta de testers");
-                case 5 -> System.out.println("Estadisticas");
+                case 4 -> consultarTesters();
+                case 5 -> verEstadisticas();
             }
             
             imprimirTitulo(); // Luego de realizar la accion requerida, se imprime el titulo nuevamente
@@ -54,9 +55,7 @@ public class Menu {
      * Imprime el cabezal MENU en un encuadrado
      */
     private static void imprimirTitulo(){
-            PantallaUtils.imprimirTexto(SEPARADOR, true); //Imprime una serie de -
-            PantallaUtils.imprimirTexto("|                   MENU                   |", true); //Imprime el menu en el centro, con los bordes del encuadre
-            PantallaUtils.imprimirTexto(SEPARADOR, true); //Se cierra el encuadre con el borde inferior
+        PantallaUtils.imprimirEncuadrado("MENU", BORDE_ENCUADRE);
     }
     
     /**
@@ -64,7 +63,7 @@ public class Menu {
      * No admite testers ya en el sistema, edades por debajo de 0 o superiores a 150, y la experiencia debe ser menor a la edad del tester
      */
     private static void registrarTesterPorConsola(){
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Imprimir el separador con el menu
+        PantallaUtils.imprimirEncuadrado("Registrar tester", BORDE_ENCUADRE);//Imprimir el titulo de la opcion
         String nombre = PantallaUtils.getStringTrimmeadoDeInput("Ingrese el nombre del tester: ", false); //Pedir nombre del tester
         int edad = PantallaUtils.getEnteroDeInputEntre("Ingrese la edad del tester: ", 0, 100, false, "La edad debe estar entre 0 y 100"); //Pedir edad del tester, entre 0 y 150 años.  Si no se ingresa un dato valido, sigue pidiendo
         int experiencia = PantallaUtils.getEnteroDeInputEntre("Ingrese los años de experiencia del tester: ", 0, edad, false, "La experiencia debe estar entre 0 y " + edad);  //Pedir experiencia entre 0 y la edad provista. Si no se ingresa un dato valido, sigue pidiendo
@@ -80,7 +79,7 @@ public class Menu {
      * Configura el tablero de juego. Pregunta si quiere usar el tablero por defecto. En caso de responder que no se piden las 8 filas de 10 columas que constituyen el tablero con las posiciones del juego
      */
     private static void registrarMatrizPorConsola(){
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Imprimir el separador con el menu
+        PantallaUtils.imprimirEncuadrado("Registrar matriz", BORDE_ENCUADRE); //Imprimir el titulo de la opcion
         boolean tableroDefault = PantallaUtils.getBooleanDeInput("Desea usar el tablero por defecto? ", false); //Se pregunta si se desea usar la matriz por defecto. Si no se ingresa S o N, sigue pidiendo
         if(tableroDefault){ //Si se pide usar el tablero por defecto, se reestablece con la matriz por defecto
             getSistema().registrarTablero();
@@ -94,7 +93,7 @@ public class Menu {
      * Registrar un testeo. Pide caso a ejecutar, tester y el comentario. Luego de registrar el testeo, se piden los datos requeridos del caso, y se ejecuta, para luego guardar el tablero resultante en el testeo correspondiente
      */
     private static void registrarTesteo(){
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Imprimir el separador con el menu
+        PantallaUtils.imprimirEncuadrado("Registrar testeo", BORDE_ENCUADRE);//Imprimir el titulo de la opcion
             
         if(getSistema().hayTestersCargados()){//Si hay testers cargados en el sistema
             //Pedir caso
@@ -109,7 +108,8 @@ public class Menu {
             
             //Pedir tester
             //Se muestra listado de testers en el sistema
-            PantallaUtils.imprimirTexto(getSistema().testersAListado(), true);
+            PantallaUtils.imprimirTexto("Listado de testers:", true); //Titulo del listado
+            PantallaUtils.imprimirTexto(getSistema().testersAListado(null), true);
             Tester tester = PantallaUtils.getTesterDeInput(getSistema(), "Ingrese el nombre del tester: ", false); // Se pide al tester. Si se ingresa el nombre de un tester que aun no esta registrado, sigue pidiendo.
             
             //Pedir comentario
@@ -134,14 +134,26 @@ public class Menu {
         }
     }
     
+    private static void consultarTesters(){
+        PantallaUtils.imprimirEncuadrado("Consulta de testers", BORDE_ENCUADRE);
+    }
+    
+    private static void verEstadisticas(){
+        PantallaUtils.imprimirEncuadrado("Estadisticas", BORDE_ENCUADRE);//Imprimir el titulo de la opcion
+        
+        if(getSistema().hayTestersCargados()){
+            PantallaUtils.imprimirTexto(getSistema().listadoTestersConMasTests(), true);
+            
+            PantallaUtils.imprimirTexto(getSistema().listadoTestersConMenosTests(), true);
+        }
+    }
+    
     //<editor-fold desc="Casos de prueba">
     /**
      * Registrar Caso 1 - Contar fichas. Se pide las fichas a contar
      */
     private static void registrarTesteoCaso1() {
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Borde superior del encuadre
-        PantallaUtils.imprimirTexto("|           CASO 1 - Contar fichas          |", true); //Nombre del caso centrado con bordes laterales del encuadre
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Borde inferior del encuadre
+        PantallaUtils.imprimirEncuadrado("CASO 1 - Contar fichas", BORDE_ENCUADRE);
         
         char color = PantallaUtils.getColorDeInput("Ingrese el color a contar: ", false); //Pide un color. Si se ingresa un color invalido, sigue pidiendo
         int cantFichas = getSistema().contarFichas(color); //Ejecutar caso
@@ -154,9 +166,7 @@ public class Menu {
      * En caso de ser valido, se actualiza la posicion de la ficha
      */
     private static void registrarTesteoCaso2() {
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Borde superior del encuadre
-        PantallaUtils.imprimirTexto("|   CASO 2 - Validar movimiento individual  |", true); //Titulo del caso centrado, con bordes laterales
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Borde inferior del encuadre
+        PantallaUtils.imprimirEncuadrado("CASO 2 - Validar movimiento individual", BORDE_ENCUADRE);
         
         //Pedidos por consola
         char color = PantallaUtils.getColorDeInput("Ingrese el color a mover: ", false); //Pide el color de la ficha a mover. Si se ingresa un dato invalido, pide de nuevo
@@ -179,9 +189,7 @@ public class Menu {
      * En caso de ser valido, se actualizan las posiciones de las fichas
      */
     private static void registrarTesteoCaso3() {
-        PantallaUtils.imprimirTexto(SEPARADOR, true);
-        PantallaUtils.imprimirTexto("|    CASO 3 - Validar movimiento en grupo   |", true);
-        PantallaUtils.imprimirTexto(SEPARADOR, true);
+        PantallaUtils.imprimirEncuadrado("CASO 3 - Validar movimiento en grupo", BORDE_ENCUADRE);
         
         char color = PantallaUtils.getColorDeInput("Ingrese el color a mover: ", false);//Pide el color de la ficha a mover. Si se ingresa un dato invalido, pide de nuevo
         Sentido sentido = PantallaUtils.getSentidoOrtogonalDeInput("Ingrese el sentido del movimiento", false);//Pide el sentido del movimiento. Si se ingresa un dato invalido, pide de nuevo
@@ -204,9 +212,7 @@ public class Menu {
      * Registrar Caso 4- Preparar tablero. Se devuelve el string del tablero con el formato requerido y se imprime.
      */
     private static void registrarTesteoCaso4() {
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Borde superior del encuadre
-        PantallaUtils.imprimirTexto("|         CASO 4 - Preparar tablero        |", true);//Titulo del caso centrado con bordes laterales
-        PantallaUtils.imprimirTexto(SEPARADOR, true);//Borde inferior del encuadre
+        PantallaUtils.imprimirEncuadrado("CASO 4 - Preparar tablero", BORDE_ENCUADRE);
         
         PantallaUtils.imprimirTexto(getSistema().prepararTablero(), true); //Imprime el string devuelto por el caso 4
     }
@@ -215,9 +221,7 @@ public class Menu {
      * Registrar Caso 5- Verificar conexion. Pide un color y valida si todas las fichas de ese color se encuentran conectadas entre si.
      */
     private static void registrarTesteoCaso5() {
-        PantallaUtils.imprimirTexto(SEPARADOR, true); //Borde superior del encuadre
-        PantallaUtils.imprimirTexto("|        CASO 5 - Verificar conexion        |", true); //Titulo del caso centrado con bordes laterales
-        PantallaUtils.imprimirTexto(SEPARADOR, true);//Borde inferior del encuadre
+        PantallaUtils.imprimirEncuadrado("CASO 5 - Verificar conexion", BORDE_ENCUADRE);
         
         char color = PantallaUtils.getColorDeInput("Ingrese el color a revisar: ", false); //Pide un color. Si se ingresa un color invalido, sigue pidiendo
         boolean hayConexion = getSistema().verificarConexion(color); //Verifica si hay conexion
