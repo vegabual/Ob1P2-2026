@@ -1,7 +1,6 @@
 package enums;
 
 /**
- *
  * Enumerodo para definir los posibles sentidos de movimiento
  */
 public enum Sentido {
