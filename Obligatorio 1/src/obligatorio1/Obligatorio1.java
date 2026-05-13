@@ -1,6 +1,7 @@
 package obligatorio1;
 
 import service.Menu;
+import service.Sistema;
 import util.PantallaUtils;
 
 public class Obligatorio1 {
@@ -10,7 +11,7 @@ public class Obligatorio1 {
      */
     public static void main(String[] args) {
         try{
-            
+            //Imprimir cabezal del programa, dando la bienvenida y detallando los nombres de las desarrolladoras
             PantallaUtils.imprimirTexto("********************************************", true);
             PantallaUtils.imprimirTexto("*        Bienvenido al Obligatorio1        *", true);
             PantallaUtils.imprimirTexto("*         Trabajo desarrollado por         *", true);
@@ -18,30 +19,11 @@ public class Obligatorio1 {
             PantallaUtils.imprimirTexto("*        Veronica Busiello - 212712        *", true);
             PantallaUtils.imprimirTexto("********************************************", true);
             
-//            System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
-//            char[][] tablero = {
-//                {'V','V','N','N','V','V','N','N','V','V'},
-//                {'N','N','N','N','N','N','N','N','N','N'},
-//                {'N','V','V','V','V','V','N','N','V','N'},
-//                {'N','V','V','V','V','V','N','N','V','N'},
-//                {'N','V','V','V','V','V','N','N','V','N'},
-//                {'N','B','B','B','B','B','N','N','B','N'},
-//                {'B','V','V','V','V','V','B','B','V','B'},
-//                {'B','B','B','B','B','B','B','B','B','B'}
-//            };
-//            /*
-//            PantallaUtils.imprimirTablero(tablero,Color.PurpuraNegrita);
-//            Menu.mostrarMenu();*/
-//            
-//            Tablero tab1 = new Tablero();
-//            System.out.println(tab1.prepararTablero());
-//            
-//            Tablero tab2 = new Tablero(tablero);
-//            System.out.println(tab2.prepararTablero());
-//            
+            // Mostrar el menu
             Menu.mostrarMenu();
         }
         catch(Exception e){
+            //En caso de un error, se le hace un catch, y se imprime el mensaje que da la excepcion
             PantallaUtils.imprimirTexto("Hubo un error! " + e.getMessage(), true);
         }
     }

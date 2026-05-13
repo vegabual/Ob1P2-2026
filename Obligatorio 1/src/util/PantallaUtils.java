@@ -1,12 +1,15 @@
 package util;
 
+import enums.Sentido;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+import model.Tester;
+import service.Sistema;
 
 /**
- * Clase auxiliar con distintos metodos utiles para escritura y lectura de la 
- * pantalla de consola.
+ * Clase auxiliar con distintos metodos utiles para escritura y lectura de la pantalla de consola. 
+ * Toda lectura y escritura dentro del programa será manejada con esta clase, de forma que se pueda cambiar facilmente de ser necesario.
  */
 public class PantallaUtils {
     //<editor-fold desc="Parametros">
@@ -16,6 +19,10 @@ public class PantallaUtils {
     //</editor-fold>
     
     //<editor-fold desc="Getters y setters">
+    /**
+     * Getter privado para el scanner. En caso de que el scanner no haya sido incializado, lo hace en ese momento.
+     * @return 
+     */
     private static Scanner getScanner(){
         if(s == null){
             s = new Scanner(System.in);
@@ -26,19 +33,22 @@ public class PantallaUtils {
     //</editor-fold>
     
     //<editor-fold desc="Constructor - Settea utf-8">
+    /**
+     * Incializador estatico que se ejecuta al cargar la clase en memoria
+     */
     static{
         try{
             System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
         }
         catch(Exception e){
-            System.out.println("Hubo un error! " + e.getMessage());
+            System.out.println("Hubo un error al cargar UTF! " + e.getMessage());
         }
     }
     //</editor-fold>
     
     /**
-     * Obtener entero entre 2 numeros con un salto de linea entre el pedido y el 
-     * numero a pedir. Si el input no es entero, seguira pidiendo.
+     * Obtener entero entre 2 numeros desde el input. 
+     * Si el input no es entero, seguira pidiendo.
      * @param pedido Texto para mostrar el pedido al usuario.
      * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
      * entre el pedido y el input a ingresar
@@ -54,7 +64,7 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(warning + pedido, conSaltoDeLinea);
             esCorrecto = stringEsParseableAEntero(input); //Chequea si el texto ingresado es un entero
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirTexto("El valor ingresado no es un numero entero", true);
+                imprimirTexto("ERROR: El valor ingresado no es un numero entero", true);
             }
         } while (!esCorrecto);
         
@@ -62,8 +72,9 @@ public class PantallaUtils {
     }
     
     /**
-     * Obtener entero entre 2 numeros. Si el input no es entero, o no esta entre 
-     * los numeros requeridos (incluidos los bordes), seguira pidiendo.
+     * Obtener entero entre 2 numeros desde el input. 
+     * Si el input no es entero, o no esta entre los numeros requeridos 
+     * (incluidos los bordes), seguira pidiendo.
      * @param pedido Texto para mostrar el pedido al usuario.
      * @param menorQue Numero mas pequeño aceptado.
      * @param mayorQue Numero mas grande aceptado.
@@ -73,8 +84,7 @@ public class PantallaUtils {
      *      no es correcto. Si es null, se pone un mensaje por defecto
      * @return El entero ingresado por el usuario.
      */
-    public static int getEnteroDeInputEntre(String pedido, int mayorQue, int 
-            menorQue, boolean conSaltoDeLinea, String mensajeDeError){
+    public static int getEnteroDeInputEntre(String pedido, int mayorQue, int menorQue, boolean conSaltoDeLinea, String mensajeDeError){
         boolean inputEsCorrecto = false;
         int numero = 0;
         
@@ -85,8 +95,7 @@ public class PantallaUtils {
             menorQue = aux;
         }
         if(mensajeDeError == null){
-            mensajeDeError = "El valor ingresado debe estar entre " + mayorQue 
-                        + " y " + menorQue;
+            mensajeDeError = "El valor ingresado debe estar entre " + mayorQue + " y " + menorQue;
         }
         
         do{
@@ -101,8 +110,8 @@ public class PantallaUtils {
     }
     
     /**
-     * Metodo auxiliar para chequear si un String se puede convertir a entero sin riesgo de 
-     * una excepcion.
+     * Metodo auxiliar para chequear si un String se puede convertir a entero sin 
+     * riesgo de una excepcion.
      * @param str String a convertir.
      * @return Si se puede convertir.
      */
@@ -117,8 +126,24 @@ public class PantallaUtils {
     }
     
     /**
-     * Obtener string por consola
-     * @param pedido Mensaje que muestra al pedir el string
+     * Metodo auxiliar para chequear si un String se puede convertir a el enumerado 
+     * Sentido sin riesgo de una excepcion.
+     * @param str String a convertir.
+     * @return Si se puede convertir.
+     */
+    private static boolean stringEsParseableASentido(String str){
+        try{
+            Sentido s = Sentido.valueOf(str);
+            return true;
+        }
+        catch (Exception e){
+            return false;
+        }
+    }
+    
+    /**
+     * Obtener string por consola y trimmea los bordes.
+     * @param pedido Texto para mostrar el pedido al usuario.
      * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
      * entre el pedido y el input a ingresar
      * @return El string ingresado por el usuario
@@ -134,7 +159,8 @@ public class PantallaUtils {
     
     /**
      * Obtener un booleano de consola
-     * @param pedido Mensaje que muestra al pedir el booleano
+     * Si el input no es S o N, seguira pidiendo.
+     * @param pedido Texto para mostrar el pedido al usuario.
      * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
      * entre el pedido y el input a ingresar
      * @return 
@@ -148,15 +174,135 @@ public class PantallaUtils {
             String warning = "(S/N): ";
             
             input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea);
-            esCorrecto = input.equalsIgnoreCase("S") || input.equalsIgnoreCase("Si") 
-                    || input.equalsIgnoreCase("N") || input.equalsIgnoreCase("No"); //Chequea si el texto ingresado es S o N
+            esCorrecto = input.equalsIgnoreCase("S") || input.equalsIgnoreCase("Si") || input.equalsIgnoreCase("N") || input.equalsIgnoreCase("No"); //Chequea si el texto ingresado es S o N
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirTexto("El valor ingresado no es correcto. Ingrese "
-                        + "unicamente S o N.", true);
+                imprimirTexto("ERROR: El valor ingresado no es correcto. Ingrese unicamente S o N.", true);
             }
         } while (!esCorrecto);
         
         return input.equalsIgnoreCase("S") || input.equalsIgnoreCase("Si");
+    }
+    
+    /**
+     * Obtiene un tester a partir del nombre ingresado en input
+     * Si el input no corresponde con el nombre de un tester, seguira pidiendo.
+     * @param sistema Sistema donde buscará el tester
+     * @param pedido Texto para mostrar el pedido al usuario.
+     * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
+     * @return 
+     */
+    public static Tester getTesterDeInput(Sistema sistema, String pedido, boolean conSaltoDeLinea){
+        String input = "";
+        Tester testerIngresado = null;
+        
+        do{
+            input = getStringTrimmeadoDeInput(pedido, conSaltoDeLinea);
+            testerIngresado = sistema.encontrarTester(input); //Busca tester por nombre
+            if(testerIngresado == null){// Si no se encuentra, se muestra un mensaje de error
+                imprimirTexto("ERROR: No se encontro un tester llamado: . Por favor ingrese un tester existente", true);
+            }
+        } while (testerIngresado == null);
+        
+        return testerIngresado;
+    }
+    
+    /**
+     * Obtiene un color de ficha a partir del input.
+     * Si el input no es valido, seguira pidiendo.
+     * @param pedido Texto para mostrar el pedido al usuario.
+     * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
+     * @return Color ingresado ("N" o "B")
+     */
+    public static char getColorDeInput(String pedido, boolean conSaltoDeLinea){
+        String input = "";
+        boolean esCorrecto = false;
+        
+        do{
+            String warning = " (B/N): ";
+            input = getStringTrimmeadoDeInput(pedido, conSaltoDeLinea).toUpperCase();
+            esCorrecto = (input.equals("B") || input.equals("N")); //Chequea si el texto ingresado es B o N
+            if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
+                imprimirTexto("El color ingresado no es valido. Los colores validos son 'B' o 'N'", true);
+            }
+        } while (!esCorrecto);
+        
+        return input.charAt(0);
+    }
+    
+    /**
+     * Obtener sentido desde el input. 
+     * Si el input no corresponde a un sentido, seguira pidiendo.
+     * @param pedido Texto para mostrar el pedido al usuario.
+     * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
+     * entre el pedido y el input a ingresar
+     * @return El entero ingresado por el usuario.
+     */
+    public static Sentido getSentidoDeInput(String pedido, boolean conSaltoDeLinea, String warning){
+        String input = "";
+        boolean esCorrecto = false;
+        
+        do{
+            if(warning == null){
+                warning = " (S/N/E/O/SO/SE/NO/NE): ";
+            }
+            
+            input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea).toUpperCase();
+            esCorrecto = stringEsParseableASentido(input); //Chequea si el texto ingresado es un entero
+            if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
+                imprimirTexto("ERROR: El valor ingresado no es se corresponde con un sentido valido", true);
+            }
+        } while (!esCorrecto);
+        
+        return Sentido.valueOf(input);
+    }
+    
+    /**
+     * Obtener sentido desde el input, admitiendo solo movimientos ortogonales. 
+     * Si el input no corresponde a un sentido, seguira pidiendo.
+     * @param pedido Texto para mostrar el pedido al usuario.
+     * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
+     * entre el pedido y el input a ingresar
+     * @return El entero ingresado por el usuario.
+     */
+    public static Sentido getSentidoOrtogonalDeInput(String pedido, boolean conSaltoDeLinea){
+        String input = "";
+        boolean esCorrecto = false;
+        Sentido sentido;
+        
+        do{
+            sentido = getSentidoDeInput(pedido, conSaltoDeLinea, " (S/N/E/O): ");    
+            esCorrecto = (sentido == Sentido.N) || (sentido == Sentido.S) || (sentido == Sentido.E) || (sentido == Sentido.O);
+            if(!esCorrecto){
+                imprimirTexto("ERROR: El sentido seleccionado no es ortogonal", true);
+            }
+        } while (!esCorrecto);
+        
+        return sentido;
+    }
+    
+    /**
+     * Obtener forma de grupo desde el input. 
+     * Si el input no corresponde a una forma valida, seguira pidiendo.
+     * @param pedido Texto para mostrar el pedido al usuario.
+     * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea 
+     * entre el pedido y el input a ingresar
+     * @return El entero ingresado por el usuario.
+     */
+    public static char getFormaDeInput(String pedido, boolean conSaltoDeLinea){
+        String input = "";
+        boolean esCorrecto = false;
+        
+        do{
+            String warning = " (H/V):";
+            
+            input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea).toUpperCase();
+            esCorrecto = input.equals("H") || input.equals("V"); //Chequea si el texto ingresado es H o V
+            if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
+                imprimirTexto("ERROR: El valor ingresado no es se corresponde con una forma valida.", true);
+            }
+        } while (!esCorrecto);
+        
+        return input.charAt(0);
     }
     
     /**
@@ -217,7 +363,7 @@ public class PantallaUtils {
         char[][] mat = new char[filas][columnas];
         String lector;
         for(int f = 0; f < filas; f++){ //Repito por cantidad de filas requeridas
-            String pedido = "Ingrese fila numero:  " + f;
+            String pedido = "Ingrese fila numero  " + (f + 1) + ": ";
             lector = getStringTrimmeadoDeInput(pedido, false);
             boolean filaValida = false;
             while (!filaValida){ //Pedir valores mientras no sea valida la columna
@@ -227,7 +373,7 @@ public class PantallaUtils {
                 }
                 filaValida = true; //Asumo que la fila esta correcta hasta que se demuestre lo contrario
                 for(int c = 0; c < columnas && filaValida; c++){ //Recorro el string que se ingreso
-                    char caracter = lector.charAt(c);
+                    char caracter = Character.toUpperCase(lector.charAt(c));
                     if(caracter == 'V' || caracter == 'B' || caracter == 'N'){ //Si el valor ingresado esta dentro de lo correcto, lo ingreso a la matriz
                         mat[f][c] = caracter;
                     } else{ //Sino, pongo filaValida en false, y vuelvo a pedir la fila completa
