@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Tester {
+public class Tester{
     private String nombre;
     private int edad;
     private int experiencia;

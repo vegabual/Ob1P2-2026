@@ -354,6 +354,35 @@ public class PantallaUtils {
     }
     
     /**
+     * Imprime un texto centrado en un encuadre
+     * @param texto Texto a imprimir
+     * @param bordesHorizontales String que oficiara de bordes horizontales
+     */
+    public static void imprimirEncuadrado(String texto, String bordesHorizontales){
+        if(bordesHorizontales.length() - texto.length() - 2 >= 0){ //Si el texto cabe en el encuadre
+            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde superior del encuadre
+            int espaciosAImprimir = bordesHorizontales.length() - texto.length() - 2; //Definir cantidad de espacios que se deben escribir para mantener el encuadre
+            for(int i = 0; i < espaciosAImprimir/2;i++){ //Se agregan la mitad de los espacios al principio del texto
+                texto = " " + texto;
+            }
+            texto = "|" + texto; //Se agrega el borde izquierdo
+            if(espaciosAImprimir % 2 == 1){ // Si tiene cantidad impar de espacios, agregar uno para mantener bien el borde
+                espaciosAImprimir++;
+            }
+            for(int i = 0; i < espaciosAImprimir/2;i++){ //Se agrega la segunda mitad de los espacios al final del texto
+                texto += " ";
+            }
+            texto += "|"; //Se agrega el borde derecho
+            PantallaUtils.imprimirTexto(texto, true); //Se imprime el texto centrado con sus bordes laterales
+            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde inferior del encuadre
+        } else { //En caso de que no entre el texto dentro del encuadre, se imprime el texto entre los bordes, sin bordes laterales
+            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde superior del encuadre
+            PantallaUtils.imprimirTexto(texto, true); //Se imprime el texto centrado con sus bordes laterales
+            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde inferior del encuadre
+        }
+    }
+    
+    /**
      * Lee una matriz de char fila a fila utilizando el input de consola
      * @param filas Cantidad de filas de la matriz
      * @param columnas Cantidad de columnas de la matriz

@@ -2,6 +2,7 @@ package service;
 
 import enums.Sentido;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import model.Tablero;
 import model.Testeo;
@@ -55,6 +56,39 @@ public class Sistema {
     public Sistema(){
         this.setTablero(new Tablero());
         this.setTesters(new ArrayList<Tester>());
+        
+        /*DEBUG*/
+        Tester t5 = new Tester("Patricio", 42,14);
+        Tester t1 = new Tester("Vero", 32,10);
+        t1.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
+        t1.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
+        t1.registrarTesteo(3, "Testeo", this.getTablero().getPosicionesFichas());
+        t1.registrarTesteo(4, "Testeo", this.getTablero().getPosicionesFichas());
+        t1.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
+        t1.registrarTesteo(1, "Testeo", this.getTablero().getPosicionesFichas());
+        t1.registrarTesteo(5, "Testeo", this.getTablero().getPosicionesFichas());
+        
+        Tester t2 = new Tester("Nico", 32,0);
+        t2.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
+        t2.registrarTesteo(1, "Testeo", this.getTablero().getPosicionesFichas());
+        t2.registrarTesteo(5, "Testeo", this.getTablero().getPosicionesFichas());
+        
+        Tester t3 = new Tester("Pepito", 32,0);
+        t3.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
+        t3.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
+        t3.registrarTesteo(3, "Testeo", this.getTablero().getPosicionesFichas());
+        t3.registrarTesteo(4, "Testeo", this.getTablero().getPosicionesFichas());
+        t3.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
+        t3.registrarTesteo(1, "Testeo", this.getTablero().getPosicionesFichas());
+        t3.registrarTesteo(5, "Testeo", this.getTablero().getPosicionesFichas());
+        
+        Tester t4 = new Tester("Rosita", 22,2);
+        
+        this.getTesters().add(t5);
+        this.getTesters().add(t2);
+        this.getTesters().add(t1);
+        this.getTesters().add(t3);
+        this.getTesters().add(t4);
     }
     //</editor-fold>
     
@@ -135,9 +169,16 @@ public class Sistema {
      * Devuelve un listado con los testers registrados
      * @return String con la lista de los testers
      */
-    public String testersAListado(){
-        Iterator<Tester> it = this.getTesters().iterator(); //Se define un iterador para recorrer la lista de testers
-        String testerList = "Listado de testers:"; //Titulo del listado
+    public String testersAListado(ArrayList<Tester> testers){
+        if(testers == null){
+            testers = this.getTesters();
+        }
+        Iterator<Tester> it = testers.iterator(); //Se define un iterador para recorrer la lista de testers
+        String testerList = "";
+        if(it.hasNext()){ //Primer valor
+            testerList += "  " + it.next(); //Agrego la sangria y el testeo (que ya tiene definido un metodo toString)
+        }
+        
         while(it.hasNext()){ //Mientras hayan valores
             testerList += "\n  " + it.next(); //Agrego un salto de linea y el testeo (que ya tiene definido un metodo toString)
         }
@@ -153,10 +194,65 @@ public class Sistema {
         return tester.testeosAListado();
     }
     
+    /**
+     * Valida si hay algun tester registrados. Util para funcionalidades que necesitan asociarse a un tester.
+     * @return Si hay testers registrados en el sistema
+     */
     public boolean hayTestersCargados(){
         return this.getTesters().size() > 0;
     }
     
+    
+    
+    public String listadoTestersConMasTests(){
+        ArrayList<Tester> testersCopia = (ArrayList<Tester>) this.getTesters().clone();
+        String listadoTesters = "Testers con mas tests realizados ";
+        
+        testersCopia.sort(new CriterioCantTesteosDesc());
+        
+        Iterator<Tester> it = testersCopia.iterator();
+        boolean terminoMayores = false;
+        int mayorCantidadTesteos = 0;
+        
+        if(it.hasNext()){ //Primer item
+            mayorCantidadTesteos = testersCopia.get(0).getTesteos().size();
+            listadoTesters += "(" + mayorCantidadTesteos + " tests):";
+        } else{
+            terminoMayores = true;
+        }
+        while(it.hasNext() && !terminoMayores){
+            Tester t = it.next();
+            if(t.getTesteos().size() == mayorCantidadTesteos){
+                listadoTesters += "\n  " + t.toString();
+            } else{
+                terminoMayores = true;
+            }
+        }
+        return listadoTesters;
+    }
+    
+    public String listadoTestersConMenosTests(){
+        String listadoTesters = "Testers que aun no han realizado tests: ";
+        
+        Iterator<Tester> it = this.getTesters().iterator();
+        int mayorCantidadTesteos = 0;
+        
+        while(it.hasNext()){
+            Tester t = it.next();
+            if(t.getTesteos().size() == 0){
+                listadoTesters += "\n  " + t.toString();
+            } 
+        }
+        
+        return listadoTesters;
+    }
+    
+    private class CriterioCantTesteosDesc implements Comparator<Tester>{
+        @Override
+        public int compare(Tester tester1, Tester tester2){
+            return tester2.getTesteos().size() - tester1.getTesteos().size();
+        }
+    }
     //<editor-fold desc="Funcionalidades de juego">
     /**
      * Contar fichas del tablero
