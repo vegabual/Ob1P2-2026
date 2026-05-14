@@ -1,12 +1,14 @@
 package service;
 
+import enums.Color;
 import enums.Sentido;
 import model.Tester;
 import util.PantallaUtils;
 
 public class Menu {
+    private static final Color COLOR_MENU = Color.Celeste;
     private static final String BORDE_ENCUADRE = "--------------------------------------------"; //Separador utilizado a lo largo del menu para generar recuadros y separaciones
-    private static final String SEPARADOR = "********************************************"; //Separador utilizado a lo largo del menu para generar recuadros y separaciones
+    private static final String SEPARADOR = PantallaUtils.stringAColor("********************************************", COLOR_MENU); //Separador utilizado a lo largo del menu para generar recuadros y separaciones
     private static Sistema sistema = new Sistema();
 
     //<editor-fold desc="Getters y Setters">
@@ -18,6 +20,7 @@ public class Menu {
         return sistema;
     }
     //</editor-fold>
+    
     /**
      * Despliega el menu y pide la opcion a ejecutar hasta que no se ingrese el 0 para salir
      */
@@ -48,7 +51,7 @@ public class Menu {
             imprimirTitulo(); // Luego de realizar la accion requerida, se imprime el titulo nuevamente
             option =  PantallaUtils.getEnteroDeInputEntre(pedido,0,5, true, mensajeDeError); //Se vuelve a mostrar el listado de opciones
         }
-        PantallaUtils.imprimirTexto("Gracias por participar del testing!", true); //Al salir, agradecer por participar
+        PantallaUtils.imprimirTexto("Gracias por participar del testing!", COLOR_MENU, true); //Al salir, agradecer por participar
     }
     
     /**

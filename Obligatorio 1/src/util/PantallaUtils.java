@@ -1,5 +1,6 @@
 package util;
 
+import enums.Color;
 import enums.Sentido;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -64,7 +65,7 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(warning + pedido, conSaltoDeLinea);
             esCorrecto = stringEsParseableAEntero(input); //Chequea si el texto ingresado es un entero
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirTexto("ERROR: El valor ingresado no es un numero entero", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es un numero entero", true);
             }
         } while (!esCorrecto);
         
@@ -102,7 +103,7 @@ public class PantallaUtils {
             numero = getEnteroDeInput(pedido, conSaltoDeLinea);    
             inputEsCorrecto = numero <= menorQue && numero >= mayorQue;
             if(!inputEsCorrecto){
-                imprimirTexto("ERROR: " + mensajeDeError, true);
+                PantallaUtils.imprimirTexto("ERROR: " + mensajeDeError, true);
             }
         } while (!inputEsCorrecto);
         
@@ -176,7 +177,7 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea);
             esCorrecto = input.equalsIgnoreCase("S") || input.equalsIgnoreCase("Si") || input.equalsIgnoreCase("N") || input.equalsIgnoreCase("No"); //Chequea si el texto ingresado es S o N
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirTexto("ERROR: El valor ingresado no es correcto. Ingrese unicamente S o N.", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es correcto. Ingrese unicamente S o N.", true);
             }
         } while (!esCorrecto);
         
@@ -199,7 +200,7 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(pedido, conSaltoDeLinea);
             testerIngresado = sistema.encontrarTester(input); //Busca tester por nombre
             if(testerIngresado == null){// Si no se encuentra, se muestra un mensaje de error
-                imprimirTexto("ERROR: No se encontro un tester llamado: . Por favor ingrese un tester existente", true);
+                PantallaUtils.imprimirTexto("ERROR: No se encontro un tester llamado: . Por favor ingrese un tester existente", true);
             }
         } while (testerIngresado == null);
         
@@ -222,7 +223,7 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(pedido, conSaltoDeLinea).toUpperCase();
             esCorrecto = (input.equals("B") || input.equals("N")); //Chequea si el texto ingresado es B o N
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirTexto("El color ingresado no es valido. Los colores validos son 'B' o 'N'", true);
+                PantallaUtils.imprimirTexto("El color ingresado no es valido. Los colores validos son 'B' o 'N'", true);
             }
         } while (!esCorrecto);
         
@@ -249,7 +250,7 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea).toUpperCase();
             esCorrecto = stringEsParseableASentido(input); //Chequea si el texto ingresado es un entero
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirTexto("ERROR: El valor ingresado no es se corresponde con un sentido valido", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es se corresponde con un sentido valido", true);
             }
         } while (!esCorrecto);
         
@@ -273,7 +274,7 @@ public class PantallaUtils {
             sentido = getSentidoDeInput(pedido, conSaltoDeLinea, " (S/N/E/O): ");    
             esCorrecto = (sentido == Sentido.N) || (sentido == Sentido.S) || (sentido == Sentido.E) || (sentido == Sentido.O);
             if(!esCorrecto){
-                imprimirTexto("ERROR: El sentido seleccionado no es ortogonal", true);
+                PantallaUtils.imprimirTexto("ERROR: El sentido seleccionado no es ortogonal", true);
             }
         } while (!esCorrecto);
         
@@ -298,11 +299,23 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea).toUpperCase();
             esCorrecto = input.equals("H") || input.equals("V"); //Chequea si el texto ingresado es H o V
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                imprimirTexto("ERROR: El valor ingresado no es se corresponde con una forma valida.", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es se corresponde con una forma valida.", true);
             }
         } while (!esCorrecto);
         
         return input.charAt(0);
+    }
+     /**
+     * Imprime texto a color en consola.
+     * @param texto Texto a imprimir.
+     * @param col Color en el que imprimira el texto.
+     * @param conSaltoDeLinea Booleano que indica si debe haber salto de linea luego de la impresion
+     */
+    public static void imprimirTexto(String texto, Color col, boolean conSaltoDeLinea){
+        System.out.print(col + texto + ANSI_RESET);
+        if(conSaltoDeLinea){
+            System.out.println();
+        }
     }
     
     /**
@@ -327,28 +340,29 @@ public class PantallaUtils {
     /**
      * Imprime matriz con formato de tablero de juego
      * @param mat Matriz a imprimir
+     * @param accent Color para los acentos (los bordes de la matriz)
      */
-    public static void imprimirTablero(char[][] mat){
+    public static void imprimirTablero(char[][] mat, Color accent){
         for(int row = 0; row < mat.length;row++){
-            imprimirTexto("+", false);
+            imprimirTexto("+", accent, false);
             for(int col = 0; col<mat[row].length;col++){
-                imprimirTexto("---+", false);
+                imprimirTexto("---+", accent,false);
             }
             imprimirSaltoDeLinea();
-            imprimirTexto("|", false);
+            imprimirTexto("|", accent,false);
             for(int col = 0; col<mat[row].length;col++){
                 if( mat[row][col] == 'V'){
-                    imprimirTexto("   |", false);
+                    imprimirTexto("   |", accent,false);
                 } else{
                     System.out.print(" " + mat[row][col] + " ");
-                    imprimirTexto("|", false);
+                    imprimirTexto("|", accent,false);
                 }
             }
             imprimirSaltoDeLinea();
         }
-        imprimirTexto("+", false);
+        imprimirTexto("+", accent,false);
         for(int col = 0; col < mat[0].length;col++){
-            imprimirTexto("---+", false);
+            imprimirTexto("---+", accent,false);
         }
         imprimirSaltoDeLinea();
     }
@@ -359,27 +373,38 @@ public class PantallaUtils {
      * @param bordesHorizontales String que oficiara de bordes horizontales
      */
     public static void imprimirEncuadrado(String texto, String bordesHorizontales){
+        Color colorEncuadre = Color.Celeste;
         if(bordesHorizontales.length() - texto.length() - 2 >= 0){ //Si el texto cabe en el encuadre
-            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde superior del encuadre
             int espaciosAImprimir = bordesHorizontales.length() - texto.length() - 2; //Definir cantidad de espacios que se deben escribir para mantener el encuadre
             for(int i = 0; i < espaciosAImprimir/2;i++){ //Se agregan la mitad de los espacios al principio del texto
                 texto = " " + texto;
             }
-            texto = "|" + texto; //Se agrega el borde izquierdo
+            texto = stringAColor("|", colorEncuadre) + texto; //Se agrega el borde izquierdo
             if(espaciosAImprimir % 2 == 1){ // Si tiene cantidad impar de espacios, agregar uno para mantener bien el borde
                 espaciosAImprimir++;
             }
             for(int i = 0; i < espaciosAImprimir/2;i++){ //Se agrega la segunda mitad de los espacios al final del texto
                 texto += " ";
             }
-            texto += "|"; //Se agrega el borde derecho
+            texto += stringAColor("|", colorEncuadre); //Se agrega el borde derecho
+            
+            PantallaUtils.imprimirTexto(bordesHorizontales, colorEncuadre, true); //Se imprime el borde superior del encuadre
             PantallaUtils.imprimirTexto(texto, true); //Se imprime el texto centrado con sus bordes laterales
-            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde inferior del encuadre
+            PantallaUtils.imprimirTexto(bordesHorizontales, colorEncuadre, true); //Se imprime el borde inferior del encuadre
         } else { //En caso de que no entre el texto dentro del encuadre, se imprime el texto entre los bordes, sin bordes laterales
-            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde superior del encuadre
+            PantallaUtils.imprimirTexto(bordesHorizontales, colorEncuadre, true); //Se imprime el borde superior del encuadre
             PantallaUtils.imprimirTexto(texto, true); //Se imprime el texto centrado con sus bordes laterales
-            PantallaUtils.imprimirTexto(bordesHorizontales, true); //Se imprime el borde inferior del encuadre
+            PantallaUtils.imprimirTexto(bordesHorizontales, colorEncuadre, true); //Se imprime el borde inferior del encuadre
         }
+    }
+     
+    /**
+    * Devuelve texto con formato de color para consola.
+    * @param texto Texto a pasar al formato.
+    * @param col Color en el que imprimira el texto.
+    */
+    public static String stringAColor(String texto, Color col){
+        return col + texto + ANSI_RESET;
     }
     
     /**
@@ -392,22 +417,22 @@ public class PantallaUtils {
         char[][] mat = new char[filas][columnas];
         String lector;
         for(int f = 0; f < filas; f++){ //Repito por cantidad de filas requeridas
-            String pedido = "Ingrese fila numero  " + (f + 1) + ": ";
+            String pedido = stringAColor("Ingrese fila numero:  " + f, Color.Amarillo);
             lector = getStringTrimmeadoDeInput(pedido, false);
             boolean filaValida = false;
             while (!filaValida){ //Pedir valores mientras no sea valida la columna
                 while(lector.length() != columnas){ //Mientras no se ingresen tantos caracteres como columnas, volver a pedir fila
-                    imprimirTexto("La matriz debe tener  " + columnas + " columnas",  true);
+                    imprimirTexto("La matriz debe tener  " + columnas + " columnas", Color.Rojo, true);
                     lector = getStringTrimmeadoDeInput(pedido, false);
                 }
                 filaValida = true; //Asumo que la fila esta correcta hasta que se demuestre lo contrario
                 for(int c = 0; c < columnas && filaValida; c++){ //Recorro el string que se ingreso
-                    char caracter = Character.toUpperCase(lector.charAt(c));
+                    char caracter = lector.charAt(c);
                     if(caracter == 'V' || caracter == 'B' || caracter == 'N'){ //Si el valor ingresado esta dentro de lo correcto, lo ingreso a la matriz
                         mat[f][c] = caracter;
                     } else{ //Sino, pongo filaValida en false, y vuelvo a pedir la fila completa
                         filaValida = false;
-                        imprimirTexto("La matriz solo acepta 'B', 'N' o 'V' columnas", true);
+                        imprimirTexto("La matriz solo acepta 'B', 'N' o 'V' columnas", Color.Rojo, true);
                         lector = getStringTrimmeadoDeInput(pedido, false);
                     }
                 }
