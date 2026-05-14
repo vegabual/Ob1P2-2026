@@ -56,39 +56,6 @@ public class Sistema {
     public Sistema(){
         this.setTablero(new Tablero());
         this.setTesters(new ArrayList<Tester>());
-        
-        /*DEBUG*/
-        Tester t5 = new Tester("Patricio", 42,14);
-        Tester t1 = new Tester("Vero", 32,10);
-        t1.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
-        t1.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
-        t1.registrarTesteo(3, "Testeo", this.getTablero().getPosicionesFichas());
-        t1.registrarTesteo(4, "Testeo", this.getTablero().getPosicionesFichas());
-        t1.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
-        t1.registrarTesteo(1, "Testeo", this.getTablero().getPosicionesFichas());
-        t1.registrarTesteo(5, "Testeo", this.getTablero().getPosicionesFichas());
-        
-        Tester t2 = new Tester("Nico", 32,0);
-        t2.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
-        t2.registrarTesteo(1, "Testeo", this.getTablero().getPosicionesFichas());
-        t2.registrarTesteo(5, "Testeo", this.getTablero().getPosicionesFichas());
-        
-        Tester t3 = new Tester("Pepito", 32,0);
-        t3.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
-        t3.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
-        t3.registrarTesteo(3, "Testeo", this.getTablero().getPosicionesFichas());
-        t3.registrarTesteo(4, "Testeo", this.getTablero().getPosicionesFichas());
-        t3.registrarTesteo(2, "Testeo", this.getTablero().getPosicionesFichas());
-        t3.registrarTesteo(1, "Testeo", this.getTablero().getPosicionesFichas());
-        t3.registrarTesteo(5, "Testeo", this.getTablero().getPosicionesFichas());
-        
-        Tester t4 = new Tester("Rosita", 22,2);
-        
-        this.getTesters().add(t5);
-        this.getTesters().add(t2);
-        this.getTesters().add(t1);
-        this.getTesters().add(t3);
-        this.getTesters().add(t4);
     }
     //</editor-fold>
     
@@ -170,7 +137,7 @@ public class Sistema {
      * @return String con la lista de los testers
      */
     public String testersAListado(ArrayList<Tester> testers){
-        if(testers == null){
+        if(testers == null){ //Si no se pasa un listado de testers, es porque se quiere imprimir todos los testers registrados
             testers = this.getTesters();
         }
         Iterator<Tester> it = testers.iterator(); //Se define un iterador para recorrer la lista de testers
@@ -202,57 +169,87 @@ public class Sistema {
         return this.getTesters().size() > 0;
     }
     
-    
-    
+    /**
+     * Devuelve el listado con el/los testers con mas tests ejecutados
+     * @return String con el listado y su titulo
+     */
     public String listadoTestersConMasTests(){
-        ArrayList<Tester> testersCopia = (ArrayList<Tester>) this.getTesters().clone();
-        String listadoTesters = "Testers con mas tests realizados ";
+        ArrayList<Tester> testersCopia = (ArrayList<Tester>) this.getTesters().clone(); //Se hace una copia del listado, para no cambiar el orden original
+        String listadoTesters = "Testers con mas tests realizados "; //Incializo el string con el titulo
         
-        testersCopia.sort(new CriterioCantTesteosDesc());
+        testersCopia.sort(new CriterioCantTesteosDesc()); //Se ordena con el criterio de ordenacion provisto
         
-        Iterator<Tester> it = testersCopia.iterator();
-        boolean terminoMayores = false;
-        int mayorCantidadTesteos = 0;
+        Iterator<Tester> it = testersCopia.iterator(); //Se define un iterador para recorrer la lista de testers
+        boolean terminoMayores = false; //Variable auxiliar para marcar que se terminaron de recorrer los tester con mayor cantidad de testeos
+        int mayorCantidadTesteos = 0; //Variable auxiliar para guardar cual es el mayor numero de testeos realizados por un tester
         
-        if(it.hasNext()){ //Primer item
-            mayorCantidadTesteos = testersCopia.get(0).getTesteos().size();
-            listadoTesters += "(" + mayorCantidadTesteos + " tests):";
+        if(it.hasNext()){ //Primer item de la lista (el que tiene mas testeos por ordenamiento)
+            mayorCantidadTesteos = testersCopia.get(0).getTesteos().size(); //Guarda cuanto es la mayor cantidad de testeos
+            
+            if(mayorCantidadTesteos == 1){ //Chequeo si necesito usar el plural de test
+                listadoTesters += "(1 test):"; //Agrega que el maximo de tests corridos por tester es 1
+            } else{
+                listadoTesters += "(" + mayorCantidadTesteos + " tests):"; //Agrega el valor de cuantos testeos son los maximos corridos por tester en el titulo.
+            }
         } else{
             terminoMayores = true;
         }
-        while(it.hasNext() && !terminoMayores){
-            Tester t = it.next();
-            if(t.getTesteos().size() == mayorCantidadTesteos){
-                listadoTesters += "\n  " + t.toString();
+        while(it.hasNext() && !terminoMayores){ //Mientras sigan habiendo items, y no haya terminado de recorrer los testers con mayor cantidad de tests corridos
+            Tester t = it.next(); //Guarda un puntero al siguiente item
+            if(t.getTesteos().size() == mayorCantidadTesteos){ //Si tiene tantos testeos como el que tiene mas
+                listadoTesters += "\n  " + t.toString(); //Se agrega al listado
             } else{
-                terminoMayores = true;
+                terminoMayores = true; //Sino, es que ya se terminaron (pues la lista esta ordenada)
             }
         }
         return listadoTesters;
     }
     
+    /**
+     * Devuelve el listado con el/los testers que aun no han ejecutado tests
+     * @return String con el listado y su titulo
+     */
     public String listadoTestersConMenosTests(){
-        String listadoTesters = "Testers que aun no han realizado tests: ";
+        String listadoTesters = ""; //Inicializo el string;
+        int cantidadTesters = 0; //Contador para poder dar la informacion en el titulo
+        Iterator<Tester> it = this.getTesters().iterator(); //Se define un iterador para recorrer la lista de testers
         
-        Iterator<Tester> it = this.getTesters().iterator();
-        int mayorCantidadTesteos = 0;
-        
-        while(it.hasNext()){
-            Tester t = it.next();
-            if(t.getTesteos().size() == 0){
-                listadoTesters += "\n  " + t.toString();
+        while(it.hasNext()){ //Mientras hayan items en la lista
+            Tester t = it.next(); //Guarda un puntero al siguiente item
+            if(t.getTesteos().size() == 0){ //Si no tiene testeos, lo guarda
+                cantidadTesters++; //Aumento en 1 el contador
+                listadoTesters += "\n  " + t.toString(); //Se agrega el tester al listado
             } 
         }
+        String titulo = "Testers que aun no han realizado tests (" + cantidadTesters + " testers): "; //Incializo el titulo asumiendo que hay multiples testers que no han corrido pruebas
+        
+        if(cantidadTesters == 0){
+            titulo = "No hay testers que no hayan corrido pruebas!"; //Si ningun tester corrio pruebas, listadoTesters será vacio, por lo que no hay testers a mostrar
+        } else if(cantidadTesters == 1) {
+            titulo = "Testers que aun no han realizado tests (1 tester): "; //Si solo 1 tester corrio pruebas, arreglo el titulo para usar el singular
+        }
+        
+        listadoTesters = titulo + listadoTesters; //Se agrega el titulo al comienzo del string, con la cantidad de testers sin testeos
         
         return listadoTesters;
     }
     
+    /**
+     * Inner class para agregar un criterio de comparacion para los testers.
+     */
     private class CriterioCantTesteosDesc implements Comparator<Tester>{
+        /**
+         * Compara 2 Tester
+         * @param tester1 Tester a comparar
+         * @param tester2 Tester a comparar
+         * @return La diferencia de testeos entre tester2 y tester1
+         */
         @Override
         public int compare(Tester tester1, Tester tester2){
             return tester2.getTesteos().size() - tester1.getTesteos().size();
         }
     }
+    
     //<editor-fold desc="Funcionalidades de juego">
     /**
      * Contar fichas del tablero

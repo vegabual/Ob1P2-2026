@@ -13,7 +13,7 @@ public class Obligatorio1 {
         try{
             //Imprimir cabezal del programa, dando la bienvenida y detallando los nombres de las desarrolladoras
             PantallaUtils.imprimirTexto("********************************************", true);
-            PantallaUtils.imprimirTexto("*        Bienvenido al Obligatorio1        *", true);
+            PantallaUtils.imprimirTexto("*        Bienvenido al Obligatorio 1       *", true);
             PantallaUtils.imprimirTexto("*         Trabajo desarrollado por         *", true);
             PantallaUtils.imprimirTexto("*          Lourdes Ayala - 354398          *", true);
             PantallaUtils.imprimirTexto("*        Veronica Busiello - 212712        *", true);

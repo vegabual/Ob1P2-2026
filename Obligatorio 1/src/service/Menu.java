@@ -136,15 +136,18 @@ public class Menu {
     
     private static void consultarTesters(){
         PantallaUtils.imprimirEncuadrado("Consulta de testers", BORDE_ENCUADRE);
+            PantallaUtils.imprimirTexto("FUNCIONALIDAD EN PROGRESO, VUELVA MAS ADELANTE", true);
     }
     
     private static void verEstadisticas(){
         PantallaUtils.imprimirEncuadrado("Estadisticas", BORDE_ENCUADRE);//Imprimir el titulo de la opcion
         
-        if(getSistema().hayTestersCargados()){
+        if(getSistema().hayTestersCargados()){ //Si hay algun tester, se imprimen los testers con mas tests y los que aun no han corrido tests
             PantallaUtils.imprimirTexto(getSistema().listadoTestersConMasTests(), true);
             
             PantallaUtils.imprimirTexto(getSistema().listadoTestersConMenosTests(), true);
+        } else{ //Sino, se imprime un mensaje de que no hay testers y por lo tanto, no hay estadisticas
+            PantallaUtils.imprimirTexto("No hay estadisticas, no hay testers registrados", true);
         }
     }
     
