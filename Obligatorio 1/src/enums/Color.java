@@ -1,5 +1,7 @@
 package enums;
 
+
+
 /**
  * Enumerodo para definir colores para la impresion en consola
  */

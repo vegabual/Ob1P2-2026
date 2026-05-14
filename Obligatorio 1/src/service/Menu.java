@@ -74,7 +74,7 @@ public class Menu {
         if(getSistema().registrarTester(nombre, edad, experiencia)){ //Si es posible agregar el tester, imprimir mensaje de exito
             PantallaUtils.imprimirTexto("El tester fue agregado correctamente", true);
         } else{ //Si no se pudo crear, es porque ya existe uno con el mismo nombre, mostrar mensaje de error
-            PantallaUtils.imprimirTexto("ERROR: Ya existe un tester con el nombre " + nombre, true);
+            PantallaUtils.imprimirTexto("ERROR: Ya existe un tester con el nombre " + nombre, Color.Rojo, true);
         }
     }
     

@@ -60,12 +60,12 @@ public class PantallaUtils {
         boolean esCorrecto = false;
         
         do{
-            String warning = "(Solo estan permitidos numeros enteros) ";
+            String warning = stringAColor("(Solo estan permitidos numeros enteros) ", Color.Amarillo);
             
             input = getStringTrimmeadoDeInput(warning + pedido, conSaltoDeLinea);
             esCorrecto = stringEsParseableAEntero(input); //Chequea si el texto ingresado es un entero
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es un numero entero", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es un numero entero", Color.Rojo, true);
             }
         } while (!esCorrecto);
         
@@ -103,7 +103,7 @@ public class PantallaUtils {
             numero = getEnteroDeInput(pedido, conSaltoDeLinea);    
             inputEsCorrecto = numero <= menorQue && numero >= mayorQue;
             if(!inputEsCorrecto){
-                PantallaUtils.imprimirTexto("ERROR: " + mensajeDeError, true);
+                PantallaUtils.imprimirTexto("ERROR: " + mensajeDeError, Color.Rojo, true);
             }
         } while (!inputEsCorrecto);
         
@@ -172,12 +172,12 @@ public class PantallaUtils {
         boolean siONo = false;
         
         do{
-            String warning = "(S/N): ";
+            String warning = stringAColor("(S/N): ", Color.Amarillo);
             
             input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea);
             esCorrecto = input.equalsIgnoreCase("S") || input.equalsIgnoreCase("Si") || input.equalsIgnoreCase("N") || input.equalsIgnoreCase("No"); //Chequea si el texto ingresado es S o N
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es correcto. Ingrese unicamente S o N.", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es correcto. Ingrese unicamente S o N.", Color.Rojo, true);
             }
         } while (!esCorrecto);
         
@@ -200,7 +200,7 @@ public class PantallaUtils {
             input = getStringTrimmeadoDeInput(pedido, conSaltoDeLinea);
             testerIngresado = sistema.encontrarTester(input); //Busca tester por nombre
             if(testerIngresado == null){// Si no se encuentra, se muestra un mensaje de error
-                PantallaUtils.imprimirTexto("ERROR: No se encontro un tester llamado: . Por favor ingrese un tester existente", true);
+                PantallaUtils.imprimirTexto("ERROR: No se encontro un tester llamado: . Por favor ingrese un tester existente", Color.Rojo, true);
             }
         } while (testerIngresado == null);
         
@@ -219,7 +219,7 @@ public class PantallaUtils {
         boolean esCorrecto = false;
         
         do{
-            String warning = " (B/N): ";
+            String warning = stringAColor(" (B/N): ", Color.Amarillo);
             input = getStringTrimmeadoDeInput(pedido, conSaltoDeLinea).toUpperCase();
             esCorrecto = (input.equals("B") || input.equals("N")); //Chequea si el texto ingresado es B o N
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
@@ -247,10 +247,10 @@ public class PantallaUtils {
                 warning = " (S/N/E/O/SO/SE/NO/NE): ";
             }
             
-            input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea).toUpperCase();
+            input = getStringTrimmeadoDeInput(pedido + stringAColor(warning, Color.Amarillo), conSaltoDeLinea).toUpperCase();
             esCorrecto = stringEsParseableASentido(input); //Chequea si el texto ingresado es un entero
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es se corresponde con un sentido valido", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es se corresponde con un sentido valido", Color.Rojo, true);
             }
         } while (!esCorrecto);
         
@@ -274,7 +274,7 @@ public class PantallaUtils {
             sentido = getSentidoDeInput(pedido, conSaltoDeLinea, " (S/N/E/O): ");    
             esCorrecto = (sentido == Sentido.N) || (sentido == Sentido.S) || (sentido == Sentido.E) || (sentido == Sentido.O);
             if(!esCorrecto){
-                PantallaUtils.imprimirTexto("ERROR: El sentido seleccionado no es ortogonal", true);
+                PantallaUtils.imprimirTexto("ERROR: El sentido seleccionado no es ortogonal", Color.Rojo, true);
             }
         } while (!esCorrecto);
         
@@ -294,12 +294,12 @@ public class PantallaUtils {
         boolean esCorrecto = false;
         
         do{
-            String warning = " (H/V):";
+            String warning = stringAColor(" (H/V):", Color.Amarillo);
             
             input = getStringTrimmeadoDeInput(pedido + warning, conSaltoDeLinea).toUpperCase();
             esCorrecto = input.equals("H") || input.equals("V"); //Chequea si el texto ingresado es H o V
             if(!esCorrecto){// Si se ingreso un valor que no esta aceptado, se muestra un mensaje de error
-                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es se corresponde con una forma valida.", true);
+                PantallaUtils.imprimirTexto("ERROR: El valor ingresado no es se corresponde con una forma valida.", Color.Rojo, true);
             }
         } while (!esCorrecto);
         
@@ -417,7 +417,7 @@ public class PantallaUtils {
         char[][] mat = new char[filas][columnas];
         String lector;
         for(int f = 0; f < filas; f++){ //Repito por cantidad de filas requeridas
-            String pedido = stringAColor("Ingrese fila numero:  " + f, Color.Amarillo);
+            String pedido = stringAColor("Ingrese fila numero:  " + (f + 1) + ": ", Color.Amarillo);
             lector = getStringTrimmeadoDeInput(pedido, false);
             boolean filaValida = false;
             while (!filaValida){ //Pedir valores mientras no sea valida la columna
@@ -427,7 +427,7 @@ public class PantallaUtils {
                 }
                 filaValida = true; //Asumo que la fila esta correcta hasta que se demuestre lo contrario
                 for(int c = 0; c < columnas && filaValida; c++){ //Recorro el string que se ingreso
-                    char caracter = lector.charAt(c);
+                    char caracter = Character.toUpperCase(lector.charAt(c));
                     if(caracter == 'V' || caracter == 'B' || caracter == 'N'){ //Si el valor ingresado esta dentro de lo correcto, lo ingreso a la matriz
                         mat[f][c] = caracter;
                     } else{ //Sino, pongo filaValida en false, y vuelvo a pedir la fila completa
